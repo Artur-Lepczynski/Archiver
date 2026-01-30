@@ -2,7 +2,7 @@
   "name": "archiver",
   "version": "0.1.0",
   "description": "Archive your files with ease",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "author": "A.",
   "main": "./dist/main/main.js",
   "scripts": {
