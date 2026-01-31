@@ -72,6 +72,7 @@ const configuration: webpack.Configuration = {
               modules: true,
               sourceMap: true,
               importLoaders: 1,
+              esModule: false,
             },
           },
           "sass-loader",
