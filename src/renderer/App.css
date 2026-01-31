@@ -1,6 +1,18 @@
+:root {
+  --button-color: rgb(220, 220, 220);
+  --button-hover-color: rgb(205, 205, 205);
+  --button-active-color: rgb(190, 190, 190);
+
+  --bg-color-1: rgb(248, 248, 248);
+  --bg-color-2: rgb(220, 220, 220);
+  --bg-color-3: rgb(205, 205, 205);
+  --bg-color-4: rgb(190, 190, 190);
+}
+
 body {
   height: 100vh;
   box-sizing: border-box;
   margin: 0;
   position: relative;
+  background-color: var(--bg-color-1);
 }

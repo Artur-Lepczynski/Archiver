@@ -1,4 +1,4 @@
-import Toolbar from "./UI/Toolbar";
+import Toolbar from "./toolbar/Toolbar";
 
 export default function Main() {
   return (
