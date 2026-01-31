@@ -1,3 +1,10 @@
+import Toolbar from "./UI/Toolbar";
+
 export default function Main() {
-  return <h1>test</h1>;
+  return (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    <>
+      <Toolbar />
+    </>
+  );
 }
