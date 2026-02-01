@@ -1,0 +1,53 @@
+.modal {
+  padding-top: 20px;
+}
+
+.title {
+  margin: 0;
+  font-weight: 300;
+  text-align: center;
+  font-size: large;
+}
+
+.separator {
+  margin: 20px auto;
+}
+
+.folder-inputs-wrapper {
+  padding: 0 20px;
+}
+
+.folder-inputs-wrapper .folder-input-wrapper:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.folder-input-wrapper {
+  height: 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.label {
+  width: 80px;
+  font-size: 14px;
+}
+
+.input {
+  height: 100%;
+  box-sizing: border-box;
+  flex-grow: 1;
+}
+
+.controls-wrapper {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 20px;
+}
+
+.control {
+  width: 100px;
+  margin-left: 15px;
+}

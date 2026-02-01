@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-bind */
 import style from "./Toolbar.module.css";
 import openIcon from "../../assets/icons/open-folder.svg";
 import closeIcon from "../../assets/icons/close-folder.svg";
@@ -10,6 +11,10 @@ import ToolBarButton from "./ToolbarButton";
 import ToolbarSeparator from "./ToolbarSeparator";
 
 export default function Toolbar() {
+  async function openNewFolderModal() {
+    await window.electron.openNewFolderModal();
+  }
+
   return (
     <header className={style.toolbar}>
       <div className={style.toolbarGroup}>
@@ -18,6 +23,7 @@ export default function Toolbar() {
           icon={openIcon}
           aria-label="Open new folder"
           title="Open new folder"
+          onClick={openNewFolderModal}
         />
         <ToolBarButton
           type="button"

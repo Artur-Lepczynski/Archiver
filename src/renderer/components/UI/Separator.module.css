@@ -1,0 +1,11 @@
+.separator {
+  height: 2px;
+  width: 85%;
+  border: none;
+  background-color: var(--bg-color-3);
+}
+
+.fancy {
+  background-image: radial-gradient(circle, var(--bg-color-3) 75%, transparent 100%);
+  background-color: transparent;
+}

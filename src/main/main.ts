@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from "path";
-import { app, BrowserWindow, shell, ipcMain } from "electron";
+import { app, BrowserWindow, shell, ipcMain, dialog } from "electron";
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import MenuBuilder from "./menu";
@@ -24,6 +24,7 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+let openNewFolderModalWindow: BrowserWindow | null = null;
 
 ipcMain.on("ipc-example", async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -137,3 +138,84 @@ app
     });
   })
   .catch(console.log);
+
+function openNewFolderModal() {
+  if (openNewFolderModalWindow || !mainWindow) return;
+
+  const RESOURCES_PATH = app.isPackaged
+    ? path.join(process.resourcesPath, "assets")
+    : path.join(__dirname, "../../assets");
+
+  const getAssetPath = (...paths: string[]): string => {
+    return path.join(RESOURCES_PATH, ...paths);
+  };
+
+  openNewFolderModalWindow = new BrowserWindow({
+    width: 900,
+    height: 255,
+    resizable: false,
+    parent: mainWindow,
+    modal: true,
+    show: false,
+    minimizable: false,
+    maximizable: false,
+    icon: getAssetPath("icon.png"),
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+      additionalArguments: ["--window=newFolderModal"],
+    },
+  });
+
+  openNewFolderModalWindow.loadURL(resolveHtmlPath("index.html"));
+
+  openNewFolderModalWindow.once("ready-to-show", () => {
+    openNewFolderModalWindow?.setTitle("Open new folder");
+    openNewFolderModalWindow?.show();
+  });
+
+  openNewFolderModalWindow.on("closed", () => {
+    openNewFolderModalWindow = null;
+  });
+}
+
+ipcMain.on("close-new-folder-modal", (_event, value: string) => {
+  openNewFolderModalWindow?.close();
+});
+
+ipcMain.handle("open-new-folder-modal", openNewFolderModal);
+
+let currentArchivePath: string | undefined = undefined;
+let currentCopyPath: string | undefined = undefined;
+
+async function openNewFolderModalArchiveSelect() {
+  const newArchivePath = chooseNewFolderFile("Choose archive file");
+  if (newArchivePath) currentArchivePath = newArchivePath;
+  return currentArchivePath;
+}
+
+async function openNewFolderModalCopySelect() {
+  const newCopyPath = chooseNewFolderFile("Choose copy file");
+  if (newCopyPath) currentCopyPath = newCopyPath;
+  return currentCopyPath;
+}
+
+ipcMain.handle(
+  "open-new-folder-modal-archive-select",
+  openNewFolderModalArchiveSelect,
+);
+
+ipcMain.handle(
+  "open-new-folder-modal-copy-select",
+  openNewFolderModalCopySelect,
+);
+
+function chooseNewFolderFile(title: string) {
+  if (!openNewFolderModalWindow) return;
+
+  const paths = dialog.showOpenDialogSync(openNewFolderModalWindow, {
+    title,
+    properties: ["openDirectory", "showHiddenFiles", "dontAddToRecent"],
+  });
+
+  return paths ? paths[0] : undefined;
+}

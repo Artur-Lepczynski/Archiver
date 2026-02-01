@@ -9,10 +9,16 @@
   --bg-color-4: rgb(190, 190, 190);
 }
 
+@font-face {
+  font-family: Inter;
+  src: url(./assets/fonts/Inter-VariableFont_opsz\,wght.ttf);
+}
+
 body {
   height: 100vh;
   box-sizing: border-box;
   margin: 0;
   position: relative;
   background-color: var(--bg-color-1);
+  font-family: Inter;
 }
