@@ -47,6 +47,11 @@
   padding: 20px;
 }
 
+.errorText {
+  font-size: 12px;
+  color: var(--error-text-1);
+}
+
 .control {
   width: 100px;
   margin-left: 15px;
