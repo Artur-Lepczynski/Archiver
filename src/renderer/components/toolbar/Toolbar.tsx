@@ -15,6 +15,10 @@ export default function Toolbar() {
     await window.electron.openNewFolderModal();
   }
 
+  async function openAboutModal() {
+    await window.electron.openAboutModal();
+  }
+
   return (
     <header className={style.toolbar}>
       <div className={style.toolbarGroup}>
@@ -61,6 +65,7 @@ export default function Toolbar() {
           icon={infoIcon}
           aria-label="About"
           title="About"
+          onClick={openAboutModal}
         />
         <ToolBarButton
           type="button"

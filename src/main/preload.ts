@@ -27,6 +27,10 @@ const electronHandler = {
   isNewFolderModal: process.argv.includes("--window=newFolderModal"),
   openNewFolderModalArchiveSelect: (): Promise<string | undefined> => ipcRenderer.invoke("open-new-folder-modal-archive-select"),
   openNewFolderModalCopySelect: (): Promise<string | undefined> => ipcRenderer.invoke("open-new-folder-modal-copy-select"),
+  isAboutModal: process.argv.includes("--window=aboutModal"),
+  openAboutModal: (): Promise<void> => ipcRenderer.invoke("open-about-modal"),
+  closeAboutModal: (): void => ipcRenderer.send("close-about-modal"),
+  getVersion: (): Promise<string> => ipcRenderer.invoke("get-version"),
 };
 
 contextBridge.exposeInMainWorld("electron", electronHandler);

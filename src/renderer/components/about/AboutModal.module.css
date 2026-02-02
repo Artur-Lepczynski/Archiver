@@ -1,0 +1,50 @@
+.modal {
+  padding-top: 25px;
+  font-size: 14px;
+}
+
+.icon {
+  height: 200px;
+  width: 200px;
+  display: block;
+  margin: 0 auto 5px;
+}
+
+.name {
+  margin: 14px auto 0;
+  font-weight: 300;
+  font-size: 32px;
+  text-align: center;
+}
+
+.version {
+  font-size: 22px;
+}
+
+.separator {
+  margin: 15px auto;
+}
+
+.license-wrapper {
+  padding: 0 55px 10px;
+}
+
+.license-title {
+  margin: 0 auto 10px;
+  text-align: center;
+}
+
+.license-text{
+  margin: 0;
+  white-space: pre-line;
+}
+
+.credits {
+  text-align: center;
+}
+
+.button {
+  display: block;
+  margin: 0 auto 15px;
+  width: 100px;
+}

@@ -25,6 +25,7 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 let openNewFolderModalWindow: BrowserWindow | null = null;
+let aboutModalWindow: BrowserWindow | null = null;
 
 ipcMain.on("ipc-example", async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -139,16 +140,17 @@ app
   })
   .catch(console.log);
 
-function openNewFolderModal() {
-  if (openNewFolderModalWindow || !mainWindow) return;
-
+function getAssetPath(...paths: string[]): string {
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, "assets")
     : path.join(__dirname, "../../assets");
+  return path.join(RESOURCES_PATH, ...paths);
+}
 
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
+ipcMain.handle("get-version", async () => app.getVersion());
+
+function openNewFolderModal() {
+  if (openNewFolderModalWindow || !mainWindow) return;
 
   openNewFolderModalWindow = new BrowserWindow({
     width: 900,
@@ -219,3 +221,40 @@ function chooseNewFolderFile(title: string) {
 
   return paths ? paths[0] : undefined;
 }
+
+function openAboutModal() {
+  if (aboutModalWindow || !mainWindow) return;
+
+  aboutModalWindow = new BrowserWindow({
+    width: 500,
+    height: 750,
+    resizable: false,
+    parent: mainWindow,
+    modal: true,
+    show: false,
+    minimizable: false,
+    maximizable: false,
+    icon: getAssetPath("icon.png"),
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+      additionalArguments: ["--window=aboutModal"],
+    },
+  });
+
+  aboutModalWindow.loadURL(resolveHtmlPath("index.html"));
+
+  aboutModalWindow.once("ready-to-show", () => {
+    aboutModalWindow?.setTitle("About");
+    aboutModalWindow?.show();
+  });
+
+  aboutModalWindow.on("closed", () => {
+    aboutModalWindow = null;
+  });
+}
+
+ipcMain.on("close-about-modal", (_event, value: string) => {
+  aboutModalWindow?.close();
+});
+
+ipcMain.handle("open-about-modal", openAboutModal);
