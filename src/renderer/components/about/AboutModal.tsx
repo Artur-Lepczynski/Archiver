@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-no-bind */
-/* eslint-disable @typescript-eslint/no-shadow */
 import { useLayoutEffect, useState } from "react";
 import style from "./AboutModal.module.css";
 import appIcon from "../../assets/icons/256x256.png";

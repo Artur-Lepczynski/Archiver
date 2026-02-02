@@ -1,5 +1,3 @@
-/* eslint-disable react/button-has-type */
-
 import React from "react";
 import style from "./ToolbarButton.module.css";
 

@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-bind */
 import style from "./Toolbar.module.css";
 import openIcon from "../../assets/icons/open-folder.svg";
 import closeIcon from "../../assets/icons/close-folder.svg";

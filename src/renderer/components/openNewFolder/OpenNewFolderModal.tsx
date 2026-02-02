@@ -1,9 +1,3 @@
-/* eslint-disable react/jsx-no-bind */
-/* eslint-disable default-case */
-/* eslint-disable consistent-return */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useMemo, useState } from "react";
 import Separator from "../UI/Separator";
 import style from "./OpenNewFolderModal.module.css";
@@ -53,6 +47,10 @@ export default function OpenNewFolderModal() {
     return { valid: true };
   }
 
+  function assertNever(x: never): never {
+    throw new Error("Unexpected value:", x);
+  }
+
   const foldersValid = useMemo(() => {
     return validateFolders(archiveURL, copyURL);
   }, [archiveURL, copyURL]);
@@ -69,6 +67,8 @@ export default function OpenNewFolderModal() {
         return "One of the folders is a subfolder of the other";
       case "DIFFERENT_FOLDER_NAME":
         return "Please choose the same logical folder - same folder name, different path";
+      default:
+        return assertNever(foldersValid.reason);
     }
   }, [foldersValid]);
 
