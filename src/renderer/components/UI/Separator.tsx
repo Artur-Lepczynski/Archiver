@@ -6,13 +6,6 @@ interface SeparatorProps {
   className?: string;
 }
 
-export default function Separator({
-  fancy = false,
-  className = "",
-}: SeparatorProps) {
-  return (
-    <hr
-      className={`${style.separator} ${className} ${fancy ? style.fancy : ""}`}
-    />
-  );
+export default function Separator({ fancy = false, className = "" }: SeparatorProps) {
+  return <hr className={`${style.separator} ${className} ${fancy ? style.fancy : ""}`} />;
 }

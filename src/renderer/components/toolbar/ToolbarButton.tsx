@@ -1,8 +1,7 @@
 import React from "react";
 import style from "./ToolbarButton.module.css";
 
-interface ToolBarButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ToolBarButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon: string;
   "aria-label": string;
 }

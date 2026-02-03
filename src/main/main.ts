@@ -14,6 +14,9 @@ import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import MenuBuilder from "./menu";
 import { resolveHtmlPath } from "./util";
+import { diffFolders } from "./services/folderDiff.service";
+import { buildRawTree } from "./fs/treeBuilder";
+import { DiffNode } from "./types/diff.types";
 
 class AppUpdater {
   constructor() {
@@ -38,8 +41,7 @@ if (process.env.NODE_ENV === "production") {
   sourceMapSupport.install();
 }
 
-const isDebug =
-  process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true";
+const isDebug = process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true";
 
 // Commented out to prevent dev tools from auto-opening
 // if (isDebug) {
@@ -201,15 +203,9 @@ async function openNewFolderModalCopySelect() {
   return currentCopyPath;
 }
 
-ipcMain.handle(
-  "open-new-folder-modal-archive-select",
-  openNewFolderModalArchiveSelect,
-);
+ipcMain.handle("open-new-folder-modal-archive-select", openNewFolderModalArchiveSelect);
 
-ipcMain.handle(
-  "open-new-folder-modal-copy-select",
-  openNewFolderModalCopySelect,
-);
+ipcMain.handle("open-new-folder-modal-copy-select", openNewFolderModalCopySelect);
 
 function chooseNewFolderFile(title: string) {
   if (!openNewFolderModalWindow) return;
@@ -258,3 +254,23 @@ ipcMain.on("close-about-modal", (_event, value: string) => {
 });
 
 ipcMain.handle("open-about-modal", openAboutModal);
+
+ipcMain.handle("diff-folders", async (_, sourcePath: string, archivePath: string) => {
+  const sourceTree = buildRawTree(sourcePath);
+  const archiveTree = buildRawTree(archivePath);
+
+  const results = diffFolders(sourceTree, archiveTree);
+
+  console.log("SOURCE:");
+  readFiles(results.source);
+
+  console.log("\nARCHIVE:");
+  readFiles(results.archive);
+
+  return results;
+});
+
+function readFiles(node: DiffNode) {
+  console.log(node.extension, node.name, node.type, node.tag);
+  node.children?.forEach((node) => readFiles(node));
+}

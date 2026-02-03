@@ -3,24 +3,15 @@ import Separator from "../UI/Separator";
 import style from "./OpenNewFolderModal.module.css";
 import GenericButton from "../UI/GenericButton";
 
-type FolderValidationError =
-  | "MISSING_PATH"
-  | "SAME_PATH"
-  | "NESTED_PATH"
-  | "DIFFERENT_FOLDER_NAME";
+type FolderValidationError = "MISSING_PATH" | "SAME_PATH" | "NESTED_PATH" | "DIFFERENT_FOLDER_NAME";
 
-type folderValidationResult =
-  | { valid: true }
-  | { valid: false; reason: FolderValidationError };
+type folderValidationResult = { valid: true } | { valid: false; reason: FolderValidationError };
 
 export default function OpenNewFolderModal() {
-  const [archiveURL, setArchiveURL] = useState("");
-  const [copyURL, setCopyURL] = useState("");
+  const [archivePath, setArchivePath] = useState("");
+  const [sourcePath, setSourcePath] = useState("");
 
-  function validateFolders(
-    archiveURL: string,
-    copyURL: string,
-  ): folderValidationResult {
+  function validateFolders(archiveURL: string, copyURL: string): folderValidationResult {
     const normalizedArchiveURL = archiveURL.replace(/\\/g, "/");
     const normalizedCopyURL = copyURL.replace(/\\/g, "/");
 
@@ -52,8 +43,8 @@ export default function OpenNewFolderModal() {
   }
 
   const foldersValid = useMemo(() => {
-    return validateFolders(archiveURL, copyURL);
-  }, [archiveURL, copyURL]);
+    return validateFolders(archivePath, sourcePath);
+  }, [archivePath, sourcePath]);
 
   const errorText = useMemo(() => {
     if (foldersValid.valid) return "";
@@ -76,21 +67,28 @@ export default function OpenNewFolderModal() {
     window.electron.closeNewFolderModal();
   }
 
+  function handleConfirm() {
+    if (foldersValid) {
+      // window.electron.closeNewFolderModal();
+      window.electron.diffFolders(sourcePath, archivePath);
+    }
+  }
+
   async function handleArchiveSelect() {
     const archivePath = await window.electron.openNewFolderModalArchiveSelect();
     if (!archivePath) return;
-    setArchiveURL(archivePath);
+    setArchivePath(archivePath);
   }
 
   async function handleCopySelect() {
     const copyPath = await window.electron.openNewFolderModalCopySelect();
     if (!copyPath) return;
-    setCopyURL(copyPath);
+    setSourcePath(copyPath);
   }
 
   return (
     <div className={style.modal}>
-      <h2 className={style.title}>Select an archive and a copy folder</h2>
+      <h2 className={style.title}>Select an archive and a source folder</h2>
       <Separator fancy className={style.separator} />
       <div className={style.folderInputsWrapper}>
         <div className={style.folderInputWrapper}>
@@ -102,7 +100,7 @@ export default function OpenNewFolderModal() {
             readOnly
             id="archive-input"
             type="text"
-            value={archiveURL}
+            value={archivePath}
           />
           <GenericButton type="button" onClick={handleArchiveSelect}>
             Select folder
@@ -110,15 +108,9 @@ export default function OpenNewFolderModal() {
         </div>
         <div className={style.folderInputWrapper}>
           <label className={style.label} htmlFor="copy-input">
-            Copy
+            Source
           </label>
-          <input
-            className={style.input}
-            readOnly
-            id="copy-input"
-            type="text"
-            value={copyURL}
-          />
+          <input className={style.input} readOnly id="copy-input" type="text" value={sourcePath} />
           <GenericButton type="button" onClick={handleCopySelect}>
             Select folder
           </GenericButton>
@@ -126,17 +118,14 @@ export default function OpenNewFolderModal() {
       </div>
       <div className={style.controlsWrapper}>
         <span className={style.errorText}>{!foldersValid || errorText}</span>
-        <GenericButton
-          className={style.control}
-          type="button"
-          onClick={handleClose}
-        >
+        <GenericButton className={style.control} type="button" onClick={handleClose}>
           Cancel
         </GenericButton>
         <GenericButton
           className={style.control}
           type="button"
           disabled={!foldersValid.valid}
+          onClick={handleConfirm}
         >
           Ok
         </GenericButton>

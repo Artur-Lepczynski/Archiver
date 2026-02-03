@@ -37,25 +37,9 @@ export default function Toolbar() {
       </div>
       <ToolbarSeparator />
       <div className={style.toolbarGroup}>
-        <ToolBarButton
-          type="button"
-          icon={undoIcon}
-          aria-label="Undo"
-          title="Undo"
-        />
-        <ToolBarButton
-          type="button"
-          icon={redoIcon}
-          aria-label="Redo"
-          title="Redo"
-          disabled
-        />
-        <ToolBarButton
-          type="button"
-          icon={upIcon}
-          aria-label="Go up"
-          title="Go up"
-        />
+        <ToolBarButton type="button" icon={undoIcon} aria-label="Undo" title="Undo" />
+        <ToolBarButton type="button" icon={redoIcon} aria-label="Redo" title="Redo" disabled />
+        <ToolBarButton type="button" icon={upIcon} aria-label="Go up" title="Go up" />
       </div>
       <div className={style.spacer} />
       <div className={style.toolbarGroup}>
@@ -66,12 +50,7 @@ export default function Toolbar() {
           title="About"
           onClick={openAboutModal}
         />
-        <ToolBarButton
-          type="button"
-          icon={settingsIcon}
-          aria-label="Settings"
-          title="Settings"
-        />
+        <ToolBarButton type="button" icon={settingsIcon} aria-label="Settings" title="Settings" />
       </div>
     </header>
   );

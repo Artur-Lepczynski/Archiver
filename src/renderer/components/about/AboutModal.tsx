@@ -26,13 +26,7 @@ export default function AboutModal() {
 
   return (
     <div className={style.modal}>
-      <img
-        className={style.icon}
-        src={appIcon}
-        alt="app icon"
-        width={200}
-        height={200}
-      />
+      <img className={style.icon} src={appIcon} alt="app icon" width={200} height={200} />
       <h2 className={style.name}>
         Archiver <span className={style.version}>v{version}</span>
       </h2>
@@ -43,11 +37,7 @@ export default function AboutModal() {
       </div>
       <Separator className={style.separator} fancy />
       <p className={style.credits}>Made by 👱🏻‍♂️ on 🌍</p>
-      <GenericButton
-        onClick={handleClose}
-        className={style.button}
-        type="button"
-      >
+      <GenericButton onClick={handleClose} className={style.button} type="button">
         Alright!
       </GenericButton>
     </div>
