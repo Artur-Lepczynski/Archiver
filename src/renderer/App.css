@@ -16,6 +16,10 @@
   src: url(./assets/fonts/Inter-VariableFont_opsz\,wght.ttf);
 }
 
+#root {
+  height: 100%;
+}
+
 body {
   height: 100vh;
   box-sizing: border-box;

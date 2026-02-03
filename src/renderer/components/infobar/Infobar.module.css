@@ -1,0 +1,12 @@
+.infobar {
+  height: 30px;
+  padding: 0 2px;
+  border-top: 2px solid var(--bg-color-3);
+  display: flex;
+  align-items: center;
+}
+
+.text {
+  font-size: 14px;
+  margin: 0;
+}

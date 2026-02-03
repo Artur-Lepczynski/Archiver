@@ -1,0 +1,9 @@
+.main-display {
+  flex-basis: 100%;
+}
+
+.main-display--no-folder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
