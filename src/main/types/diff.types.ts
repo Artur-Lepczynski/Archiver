@@ -18,3 +18,8 @@ export interface DiffNode extends RawNode {
   tag: DiffTag;
   children?: DiffNode[];
 }
+
+export interface DiffResult {
+  source: DiffNode;
+  archive: DiffNode;
+}

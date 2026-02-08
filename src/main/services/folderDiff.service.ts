@@ -6,7 +6,7 @@ export function diffFolders(
   reportProgress: (processed: number, total: number) => void,
 ): { source: DiffNode; archive: DiffNode } {
   let currentProcessed = 0;
-  const totalNodesQty = countNodes(source) + countNodes(archive);
+  const totalNodeCount = countNodes(source) + countNodes(archive);
 
   const { sourceNode, archiveNode } = diffPair(source, archive);
 
@@ -18,7 +18,7 @@ export function diffFolders(
 
   function progressStep(double: boolean) {
     double ? (currentProcessed += 2) : currentProcessed++;
-    reportProgress(currentProcessed, totalNodesQty);
+    reportProgress(currentProcessed, totalNodeCount);
   }
 
   function diffPair(
@@ -91,12 +91,12 @@ export function diffFolders(
   }
 }
 
-function markAll(node: RawNode, as: DiffTag, tick: (double: boolean) => void): DiffNode {
-  tick(false);
+function markAll(node: RawNode, as: DiffTag, progressStep: (double: boolean) => void): DiffNode {
+  progressStep(false);
   return {
     ...node,
     tag: as,
-    children: node.children?.map((child) => markAll(child, as, tick)),
+    children: node.children?.map((child) => markAll(child, as, progressStep)),
   };
 }
 

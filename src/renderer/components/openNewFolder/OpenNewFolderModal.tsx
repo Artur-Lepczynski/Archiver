@@ -69,7 +69,7 @@ export default function OpenNewFolderModal() {
 
   function handleConfirm() {
     if (foldersValid) {
-      // window.electron.closeNewFolderModal();
+      window.electron.closeNewFolderModal();
       window.electron.diffFolders(sourcePath, archivePath);
     }
   }

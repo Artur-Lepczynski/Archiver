@@ -1,7 +1,8 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-import { DiffNode } from "./types/diff.types";
+import { DiffResult } from "./types/diff.types";
+import { WorkerMessage } from "./types/workerMessage.types";
 
 export type Channels = "ipc-example";
 
@@ -33,13 +34,24 @@ const electronHandler = {
   openAboutModal: (): Promise<void> => ipcRenderer.invoke("open-about-modal"),
   closeAboutModal: (): void => ipcRenderer.send("close-about-modal"),
   getVersion: (): Promise<string> => ipcRenderer.invoke("get-version"),
-  diffFolders: (
-    sourcePath: string,
-    archivePath: string,
-  ): Promise<{ source: DiffNode; archive: DiffNode }> =>
+  diffFolders: (sourcePath: string, archivePath: string): Promise<DiffResult> =>
     ipcRenderer.invoke("diff-folders", sourcePath, archivePath),
 };
 
+const diffAPIHandler = {
+  onProgress: (callback: (message: WorkerMessage) => void) => {
+    ipcRenderer.on("diff-progress", (_, value) => {
+      callback(value);
+    });
+  },
+  onDone: (callback: (result: DiffResult) => void) => {
+    ipcRenderer.on("diff-done", (_, value) => {
+      callback(value);
+    });
+  },
+};
+
 contextBridge.exposeInMainWorld("electron", electronHandler);
+contextBridge.exposeInMainWorld("diffAPI", diffAPIHandler);
 
 export type ElectronHandler = typeof electronHandler;

@@ -267,8 +267,7 @@ ipcMain.handle("diff-folders", async (_, sourcePath: string, archivePath: string
       if (message.type === "done") {
         resolve(message);
       } else if (message.type === "progress") {
-        //TODO: send to ui
-        console.log("PROGRESS:", message.message, "val:", message.value);
+        mainWindow?.webContents.send("diff-progress", message);
       } else if (message.type === "error") {
         reject(new Error());
       }
@@ -279,11 +278,7 @@ ipcMain.handle("diff-folders", async (_, sourcePath: string, archivePath: string
     });
   }).then((results) => {
     if (results.type === "done") {
-      console.log("SOURCE:");
-      readFiles(results.result.source);
-
-      console.log("\nARCHIVE:");
-      readFiles(results.result.archive);
+      mainWindow?.webContents.send("diff-done", results.result);
     }
   });
 });
