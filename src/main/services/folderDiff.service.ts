@@ -5,6 +5,7 @@ export function diffFolders(
   archive: RawNode,
   reportProgress: (processed: number, total: number) => void,
 ): { source: DiffNode; archive: DiffNode } {
+  let lastReportedPercent = -1;
   let currentProcessed = 0;
   const totalNodeCount = countNodes(source) + countNodes(archive);
 
@@ -18,7 +19,13 @@ export function diffFolders(
 
   function progressStep(double: boolean) {
     double ? (currentProcessed += 2) : currentProcessed++;
-    reportProgress(currentProcessed, totalNodeCount);
+
+    const percent = Math.floor((currentProcessed / totalNodeCount) * 100);
+
+    if (percent > lastReportedPercent) {
+      lastReportedPercent = percent;
+      reportProgress(currentProcessed, totalNodeCount);
+    }
   }
 
   function diffPair(

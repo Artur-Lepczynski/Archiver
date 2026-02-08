@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import Infobar from "./infobar/Infobar";
 import style from "./Main.module.css";
 import MainDisplay from "./mainDisplay/mainDisplay";
