@@ -17,6 +17,9 @@ import { resolveHtmlPath } from "./util";
 import { diffFolders } from "./services/folderDiff.service";
 import { buildRawTree } from "./fs/treeBuilder";
 import { DiffNode } from "./types/diff.types";
+import { Worker } from "worker_threads";
+import { fileURLToPath } from "url";
+import { WorkerMessage } from "./types/workerMessage.types";
 
 class AppUpdater {
   constructor() {
@@ -256,18 +259,33 @@ ipcMain.on("close-about-modal", (_event, value: string) => {
 ipcMain.handle("open-about-modal", openAboutModal);
 
 ipcMain.handle("diff-folders", async (_, sourcePath: string, archivePath: string) => {
-  const sourceTree = buildRawTree(sourcePath);
-  const archiveTree = buildRawTree(archivePath);
+  return new Promise<WorkerMessage>((resolve, reject) => {
+    const worker = new Worker(path.join(__dirname, "folderDiffWorker.bundle.dev.js"));
+    worker.postMessage({ sourcePath, archivePath });
 
-  const results = diffFolders(sourceTree, archiveTree);
+    worker.on("message", (message: WorkerMessage) => {
+      if (message.type === "done") {
+        resolve(message);
+      } else if (message.type === "progress") {
+        //TODO: send to ui
+        console.log("PROGRESS:", message.message, "val:", message.value);
+      } else if (message.type === "error") {
+        reject(new Error());
+      }
+    });
+    worker.on("error", reject);
+    worker.on("exit", (code) => {
+      if (code !== 0) reject(new Error(`Worker stopped with code ${code}`));
+    });
+  }).then((results) => {
+    if (results.type === "done") {
+      console.log("SOURCE:");
+      readFiles(results.result.source);
 
-  console.log("SOURCE:");
-  readFiles(results.source);
-
-  console.log("\nARCHIVE:");
-  readFiles(results.archive);
-
-  return results;
+      console.log("\nARCHIVE:");
+      readFiles(results.result.archive);
+    }
+  });
 });
 
 function readFiles(node: DiffNode) {
