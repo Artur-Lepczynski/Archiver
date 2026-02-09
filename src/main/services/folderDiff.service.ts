@@ -1,4 +1,5 @@
 import { DiffNode, DiffTag, RawNode } from "../types/diff.types";
+import { countNodes } from "../utils/tree.utils";
 
 export function diffFolders(
   source: RawNode,
@@ -117,9 +118,4 @@ function deriveArchiveFolderTag(children: DiffNode[]) {
     (child) => child.tag === DiffTag.EXTRA || child.tag === DiffTag.EXTRA_FILES,
   );
   return someExtra ? DiffTag.EXTRA_FILES : DiffTag.NONE;
-}
-
-function countNodes(entryNode: RawNode): number {
-  if (!entryNode.children) return 1;
-  return entryNode.children.reduce((acc, child) => acc + countNodes(child), 1);
 }

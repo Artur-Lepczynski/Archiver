@@ -1,24 +1,51 @@
 import fs from "fs";
 import { RawNode } from "../types/diff.types";
 import path from "path";
+import { countNodesFromPath } from "../utils/tree.utils";
 
-export function buildRawTree(rootPath: string) {
-  const stats = fs.statSync(rootPath);
+export function buildRawTree(
+  rootPath: string,
+  reportProgress: (processed: number, total: number) => void,
+) {
+  const totalNodeCount = countNodesFromPath(rootPath);
+  let currentProcessed = 0;
+  let lastReportedPercent = 0;
 
-  const extension = path.extname(rootPath);
-  const name = path.basename(rootPath);
+  const result = buildRawTreeInternal(rootPath);
 
-  const node: RawNode = {
-    name,
-    type: stats.isDirectory() ? "dir" : "file",
-    extension: stats.isDirectory() ? "" : extension,
-  };
+  console.log("raw tree elements:", totalNodeCount);
 
-  if (stats.isDirectory()) {
-    node.children = fs.readdirSync(rootPath).map((child) => {
-      return buildRawTree(path.join(rootPath, child));
-    });
+  return result;
+
+  function progressStep() {
+    currentProcessed++;
+    const percent = Math.floor((currentProcessed / totalNodeCount) * 100);
+    console.log("\traw tree build progress:", percent);
+    if (percent > lastReportedPercent) {
+      lastReportedPercent = percent;
+      reportProgress(currentProcessed, totalNodeCount);
+    }
   }
 
-  return node;
+  function buildRawTreeInternal(rootPath: string) {
+    progressStep();
+
+    const stats = fs.statSync(rootPath);
+    const extension = path.extname(rootPath);
+    const name = path.basename(rootPath);
+
+    const node: RawNode = {
+      name,
+      type: stats.isDirectory() ? "dir" : "file",
+      extension: stats.isDirectory() ? "" : extension,
+    };
+
+    if (stats.isDirectory()) {
+      node.children = fs.readdirSync(rootPath).map((child) => {
+        return buildRawTreeInternal(path.join(rootPath, child));
+      });
+    }
+
+    return node;
+  }
 }

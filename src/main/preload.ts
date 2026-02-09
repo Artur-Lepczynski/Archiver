@@ -41,7 +41,6 @@ const electronHandler = {
 const diffAPIHandler = {
   onProgress: (callback: (message: WorkerMessage) => void) => {
     ipcRenderer.on("diff-progress", (_, value) => {
-      console.log("diff progress", value.value);
       callback(value);
     });
   },
