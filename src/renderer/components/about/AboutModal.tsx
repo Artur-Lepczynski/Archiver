@@ -30,12 +30,12 @@ export default function AboutModal() {
       <h2 className={style.name}>
         Archiver <span className={style.version}>v{version}</span>
       </h2>
-      <Separator className={style.separator} fancy />
+      <Separator className={style.separator} fancy orientation="horizontal" />
       <div className={style.licenseWrapper}>
         <p className={style.licenseTitle}>GNU general public license</p>
         <p className={style.licenseText}>{licenseText}</p>
       </div>
-      <Separator className={style.separator} fancy />
+      <Separator className={style.separator} fancy orientation="horizontal" />
       <p className={style.credits}>Made by 👱🏻‍♂️ on 🌍</p>
       <GenericButton onClick={handleClose} className={style.button} type="button">
         Alright!

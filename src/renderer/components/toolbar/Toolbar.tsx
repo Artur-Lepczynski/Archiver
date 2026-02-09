@@ -9,13 +9,21 @@ import settingsIcon from "../../assets/icons/gear.svg";
 import ToolBarButton from "./ToolbarButton";
 import ToolbarSeparator from "./ToolbarSeparator";
 
-export default function Toolbar() {
+interface ToolbarProps {
+  onReset: () => void;
+}
+
+export default function Toolbar({ onReset: handleReset }: ToolbarProps) {
   async function openNewFolderModal() {
     await window.electron.openNewFolderModal();
   }
 
   async function openAboutModal() {
     await window.electron.openAboutModal();
+  }
+
+  function handleCloseFolder() {
+    handleReset();
   }
 
   return (
@@ -33,6 +41,7 @@ export default function Toolbar() {
           icon={closeIcon}
           aria-label="Close folder"
           title="Close folder"
+          onClick={handleCloseFolder}
         />
       </div>
       <ToolbarSeparator />

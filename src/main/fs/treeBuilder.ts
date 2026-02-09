@@ -13,14 +13,11 @@ export function buildRawTree(
 
   const result = buildRawTreeInternal(rootPath);
 
-  console.log("raw tree elements:", totalNodeCount);
-
-  return result;
+  return { result, totalNodeCount };
 
   function progressStep() {
     currentProcessed++;
     const percent = Math.floor((currentProcessed / totalNodeCount) * 100);
-    console.log("\traw tree build progress:", percent);
     if (percent > lastReportedPercent) {
       lastReportedPercent = percent;
       reportProgress(currentProcessed, totalNodeCount);

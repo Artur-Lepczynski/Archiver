@@ -1,33 +1,32 @@
-import { DiffNode, DiffTag, RawNode } from "../types/diff.types";
+import { DiffNode, DiffResult, DiffTag, RawNode } from "../types/diff.types";
 import { countNodes } from "../utils/tree.utils";
 
 export function diffFolders(
   source: RawNode,
   archive: RawNode,
   reportProgress: (processed: number, total: number) => void,
-): { source: DiffNode; archive: DiffNode } {
+): DiffResult {
   let lastReportedPercent = -1;
   let currentProcessed = 0;
   const totalNodeCount = countNodes(source) + countNodes(archive);
+  const tagStats = {
+    TOTAL: totalNodeCount,
+    [DiffTag.NONE]: 0,
+    [DiffTag.OK]: 0,
+    [DiffTag.MISSING]: 0,
+    [DiffTag.MISSING_FILES]: 0,
+    [DiffTag.EXTRA]: 0,
+    [DiffTag.EXTRA_FILES]: 0,
+  };
 
   const { sourceNode, archiveNode } = diffPair(source, archive);
 
-  const res: { source: DiffNode; archive: DiffNode } = {
+  const res: DiffResult = {
     source: sourceNode!,
     archive: archiveNode!,
+    stats: tagStats,
   };
   return res;
-
-  function progressStep(double: boolean) {
-    double ? (currentProcessed += 2) : currentProcessed++;
-
-    const percent = Math.floor((currentProcessed / totalNodeCount) * 100);
-
-    if (percent > lastReportedPercent) {
-      lastReportedPercent = percent;
-      reportProgress(currentProcessed, totalNodeCount);
-    }
-  }
 
   function diffPair(
     sourceNode?: RawNode,
@@ -40,17 +39,22 @@ export function diffFolders(
 
     if (sourceNode.type === "file" && archiveNode.type === "file") {
       const extensionsTheSame = sourceNode.extension === archiveNode.extension;
+      const sourceTag = extensionsTheSame ? DiffTag.OK : DiffTag.MISSING;
+      const archiveTag = extensionsTheSame ? DiffTag.NONE : DiffTag.EXTRA;
+      tagStats[sourceTag]++;
+      tagStats[archiveTag]++;
+
       const newSourceNode: DiffNode = {
         name: sourceNode.name,
         type: sourceNode.type,
         extension: sourceNode.extension,
-        tag: extensionsTheSame ? DiffTag.OK : DiffTag.MISSING,
+        tag: sourceTag,
       };
       const newArchiveNode: DiffNode = {
         name: archiveNode.name,
         type: archiveNode.type,
         extension: archiveNode.extension,
-        tag: extensionsTheSame ? DiffTag.NONE : DiffTag.EXTRA,
+        tag: archiveTag,
       };
 
       return { sourceNode: newSourceNode, archiveNode: newArchiveNode };
@@ -97,25 +101,41 @@ export function diffFolders(
       },
     };
   }
-}
 
-function markAll(node: RawNode, as: DiffTag, progressStep: (double: boolean) => void): DiffNode {
-  progressStep(false);
-  return {
-    ...node,
-    tag: as,
-    children: node.children?.map((child) => markAll(child, as, progressStep)),
-  };
-}
+  function progressStep(double: boolean) {
+    double ? (currentProcessed += 2) : currentProcessed++;
 
-function deriveSourceFolderTag(children: DiffNode[]) {
-  const allOk = children.every((child) => child.tag === DiffTag.OK);
-  return allOk ? DiffTag.OK : DiffTag.MISSING_FILES;
-}
+    const percent = Math.floor((currentProcessed / totalNodeCount) * 100);
 
-function deriveArchiveFolderTag(children: DiffNode[]) {
-  const someExtra = children.some(
-    (child) => child.tag === DiffTag.EXTRA || child.tag === DiffTag.EXTRA_FILES,
-  );
-  return someExtra ? DiffTag.EXTRA_FILES : DiffTag.NONE;
+    if (percent > lastReportedPercent) {
+      lastReportedPercent = percent;
+      reportProgress(currentProcessed, totalNodeCount);
+    }
+  }
+
+  function markAll(node: RawNode, as: DiffTag, progressStep: (double: boolean) => void): DiffNode {
+    progressStep(false);
+    tagStats[as]++;
+    return {
+      ...node,
+      tag: as,
+      children: node.children?.map((child) => markAll(child, as, progressStep)),
+    };
+  }
+
+  function deriveSourceFolderTag(children: DiffNode[]) {
+    const allOk = children.every((child) => child.tag === DiffTag.OK);
+    const folderTag = allOk ? DiffTag.OK : DiffTag.MISSING_FILES;
+    tagStats[folderTag]++;
+    return folderTag;
+  }
+
+  function deriveArchiveFolderTag(children: DiffNode[]) {
+    const someExtra = children.some(
+      (child) => child.tag === DiffTag.EXTRA || child.tag === DiffTag.EXTRA_FILES,
+    );
+    const folderTag = someExtra ? DiffTag.EXTRA_FILES : DiffTag.NONE;
+    tagStats[folderTag]++;
+    return folderTag;
+  }
 }

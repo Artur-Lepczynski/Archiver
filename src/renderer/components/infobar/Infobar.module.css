@@ -1,12 +1,42 @@
 .infobar {
   height: 30px;
-  padding: 0 2px;
+  padding: 0 5px;
   border-top: 2px solid var(--bg-color-3);
   display: flex;
   align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  user-select: none;
+}
+
+.separator {
+  margin: 0 5px;
 }
 
 .text {
-  font-size: 14px;
   margin: 0;
+}
+
+.text-archived {
+  color: var(--ok-1);
+}
+
+.text-missing {
+  color: var(--missing-1);
+}
+
+.text-missing-files {
+  color: var(--missing-files-1);
+}
+
+.text-extra {
+  color: var(--extra-1);
+}
+
+.text-extra-files {
+  color: var(--extra-files-1);
+}
+
+.text-none {
+  color: var(--none-1);
 }

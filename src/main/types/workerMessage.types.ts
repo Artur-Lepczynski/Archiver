@@ -1,6 +1,6 @@
-import { DiffNode } from "./diff.types";
+import { DiffResult } from "./diff.types";
 
 export type WorkerMessage =
-  | { type: "progress"; message: string, value?: number }
-  | { type: "done"; result: { source: DiffNode; archive: DiffNode } }
+  | { type: "progress"; message: string; value?: number }
+  | { type: "done"; result: DiffResult }
   | { type: "error"; message: string };

@@ -22,4 +22,5 @@ export interface DiffNode extends RawNode {
 export interface DiffResult {
   source: DiffNode;
   archive: DiffNode;
+  stats: Record<DiffTag | string, number>;
 }

@@ -6,13 +6,21 @@ import { WorkerMessage } from "../types/workerMessage.types";
 parentPort?.on("message", ({ sourcePath, archivePath }) => {
   let progressMessage: WorkerMessage = { type: "progress", message: "Counting source elements" };
   parentPort?.postMessage(progressMessage);
-  const sourceTree = buildRawTree(sourcePath, reportProgress("Creating source tree"));
+  const { result: sourceTree, totalNodeCount: sourceNodeCount } = buildRawTree(
+    sourcePath,
+    reportProgress("Creating source tree"),
+  );
 
   progressMessage = { type: "progress", message: "Counting archive elements" };
   parentPort?.postMessage(progressMessage);
-  const archiveTree = buildRawTree(archivePath, reportProgress("Creating archive tree"));
+  const { result: archiveTree, totalNodeCount: archiveNodeCount } = buildRawTree(
+    archivePath,
+    reportProgress("Creating archive tree"),
+  );
 
   const result = diffFolders(sourceTree, archiveTree, reportProgress("Diffing trees like a baws"));
+  result.stats.SOURCE_NODES = sourceNodeCount;
+  result.stats.ARCHIVE_NODES = archiveNodeCount;
 
   const doneMessage: WorkerMessage = { type: "done", result };
   parentPort?.postMessage(doneMessage);
@@ -27,5 +35,5 @@ function reportProgress(message: string) {
       value: Math.floor((processed / total) * 100),
     };
     parentPort?.postMessage(progressMessage);
-  }
+  };
 }

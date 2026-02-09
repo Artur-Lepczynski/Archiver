@@ -10,6 +10,13 @@
   --bg-color-5: rgb(160, 160, 160);
 
   --error-text-1: rgb(180, 0, 0);
+
+  --ok-1: rgb(0, 135, 0);
+  --missing-1: rgb(150, 0, 0);
+  --missing-files-1: rgb(208, 135, 0);
+  --extra-1: rgb(0, 142, 170);
+  --extra-files-1: rgb(0, 170, 204);
+  --none-1: rgb(0, 135, 0);
 }
 
 @font-face {

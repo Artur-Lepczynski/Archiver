@@ -20,7 +20,8 @@ export interface DiffDataType {
 
 type DiffAction =
   | { type: "DIFF_PROGRESS"; payload: { message: WorkerMessage } }
-  | { type: "DIFF_DONE"; payload: { result: DiffResult } };
+  | { type: "DIFF_DONE"; payload: { result: DiffResult } }
+  | { type: "RESET" };
 
 function diffDataReducer(prevState: DiffDataType, action: DiffAction): DiffDataType {
   if (action.type === "DIFF_PROGRESS") {
@@ -34,6 +35,10 @@ function diffDataReducer(prevState: DiffDataType, action: DiffAction): DiffDataT
       ...prevState,
       status: DataStatus.FOLDER_OPENED,
       result: action.payload.result,
+    };
+  } else if (action.type === "RESET") {
+    return {
+      status: DataStatus.FOLDER_CLOSED,
     };
   }
   return prevState;
@@ -53,11 +58,15 @@ export default function Main() {
     });
   }, []);
 
+  function handleReset() {
+    dispatchDiffData({ type: "RESET" });
+  }
+
   return (
     <div className={style.main}>
-      <Toolbar />
+      <Toolbar onReset={handleReset} />
       <MainDisplay data={diffData} />
-      <Infobar />
+      <Infobar status={diffData.status} stats={diffData.result?.stats} />
     </div>
   );
 }

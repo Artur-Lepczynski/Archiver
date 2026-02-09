@@ -89,7 +89,7 @@ export default function OpenNewFolderModal() {
   return (
     <div className={style.modal}>
       <h2 className={style.title}>Select an archive and a source folder</h2>
-      <Separator fancy className={style.separator} />
+      <Separator fancy className={style.separator} orientation="horizontal" />
       <div className={style.folderInputsWrapper}>
         <div className={style.folderInputWrapper}>
           <label className={style.label} htmlFor="archive-input">
