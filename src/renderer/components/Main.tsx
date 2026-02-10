@@ -48,59 +48,59 @@ function diffDataReducer(prevState: DiffDataType, action: DiffAction): DiffDataT
   return prevState;
 }
 
-const dummyDiffData: DiffDataType = {
-  status: DataStatus.FOLDER_OPENED,
-  result: {
-    source: {
-      name: "source",
-      type: "dir",
-      tag: DiffTag.OK,
-      children: [
-        { name: "file1.txt", type: "file", extension: "txt", tag: DiffTag.OK },
-        { name: "file2.jpg", type: "file", extension: "jpg", tag: DiffTag.MISSING },
-        { name: "subfolder", type: "dir", tag: DiffTag.OK, children: [] },
-      ],
-    },
-    archive: {
-      name: "archive",
-      type: "dir",
-      tag: DiffTag.OK,
-      children: [
-        { name: "file1.txt", type: "file", extension: "txt", tag: DiffTag.OK },
-        { name: "subfolder", type: "dir", tag: DiffTag.NONE, children: [] },
-      ],
-    },
-    stats: {
-      TOTAL: 12,
-      [DiffTag.OK]: 5,
-      [DiffTag.MISSING]: 1,
-      [DiffTag.EXTRA]: 0,
-      [DiffTag.NONE]: 1,
-      [DiffTag.MISSING_FILES]: 0,
-      [DiffTag.EXTRA_FILES]: 0,
-    },
-  },
-  currentSource: {
-    name: "source",
-    type: "dir",
-    tag: DiffTag.OK,
-    children: [
-      { name: "file1.txt", type: "file", extension: "txt", tag: DiffTag.OK },
-      { name: "file2.jpg", type: "file", extension: "jpg", tag: DiffTag.MISSING },
-      { name: "subfolder", type: "dir", tag: DiffTag.OK, children: [] },
-    ],
-  },
-  currentArchive: {
-    name: "archive",
-    type: "dir",
-    tag: DiffTag.OK,
-    children: [
-      { name: "file1.txt", type: "file", extension: "txt", tag: DiffTag.OK },
-      { name: "file2.jpg", type: "file", extension: "jpg", tag: DiffTag.MISSING },
-      { name: "subfolder", type: "dir", tag: DiffTag.OK, children: [] },
-    ],
-  },
-};
+// const dummyDiffData: DiffDataType = {
+//   status: DataStatus.FOLDER_OPENED,
+//   result: {
+//     source: {
+//       name: "source",
+//       type: "dir",
+//       tag: DiffTag.OK,
+//       children: [
+//         { name: "file1.txt", type: "file", extension: "txt", tag: DiffTag.OK },
+//         { name: "file2.jpg", type: "file", extension: "jpg", tag: DiffTag.MISSING },
+//         { name: "subfolder", type: "dir", tag: DiffTag.OK, children: [] },
+//       ],
+//     },
+//     archive: {
+//       name: "archive",
+//       type: "dir",
+//       tag: DiffTag.OK,
+//       children: [
+//         { name: "file1.txt", type: "file", extension: "txt", tag: DiffTag.OK },
+//         { name: "subfolder", type: "dir", tag: DiffTag.NONE, children: [] },
+//       ],
+//     },
+//     stats: {
+//       TOTAL: 12,
+//       [DiffTag.OK]: 5,
+//       [DiffTag.MISSING]: 1,
+//       [DiffTag.EXTRA]: 0,
+//       [DiffTag.NONE]: 1,
+//       [DiffTag.MISSING_FILES]: 0,
+//       [DiffTag.EXTRA_FILES]: 0,
+//     },
+//   },
+//   currentSource: {
+//     name: "source",
+//     type: "dir",
+//     tag: DiffTag.OK,
+//     children: [
+//       { name: "file1.txt", type: "file", extension: "txt", tag: DiffTag.OK },
+//       { name: "file2.jpg", type: "file", extension: "jpg", tag: DiffTag.MISSING },
+//       { name: "subfolder", type: "dir", tag: DiffTag.OK, children: [] },
+//     ],
+//   },
+//   currentArchive: {
+//     name: "archive",
+//     type: "dir",
+//     tag: DiffTag.OK,
+//     children: [
+//       { name: "file1.txt", type: "file", extension: "txt", tag: DiffTag.OK },
+//       { name: "file2.jpg", type: "file", extension: "jpg", tag: DiffTag.MISSING },
+//       { name: "subfolder", type: "dir", tag: DiffTag.OK, children: [] },
+//     ],
+//   },
+// };
 
 export default function Main() {
   const [diffData, dispatchDiffData] = useReducer(diffDataReducer, {

@@ -10,6 +10,7 @@ export enum DiffTag {
 export interface RawNode {
   name: string;
   type: "file" | "dir";
+  path: string;
   extension?: string;
   children?: RawNode[];
 }

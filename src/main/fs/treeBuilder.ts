@@ -33,6 +33,7 @@ export function buildRawTree(
 
     const node: RawNode = {
       name,
+      path: rootPath,
       type: stats.isDirectory() ? "dir" : "file",
       extension: stats.isDirectory() ? "" : extension,
     };

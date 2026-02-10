@@ -47,12 +47,14 @@ export function diffFolders(
       const newSourceNode: DiffNode = {
         name: sourceNode.name,
         type: sourceNode.type,
+        path: sourceNode.path,
         extension: sourceNode.extension,
         tag: sourceTag,
       };
       const newArchiveNode: DiffNode = {
         name: archiveNode.name,
         type: archiveNode.type,
+        path: archiveNode.path,
         extension: archiveNode.extension,
         tag: archiveTag,
       };

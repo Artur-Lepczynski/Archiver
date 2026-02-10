@@ -20,7 +20,7 @@ export default function FolderDisplay({
     <div className={style.wrapper}>
       {toolbar}
       <div className={style.path}>
-        <p>{node?.name}</p>
+        <p>{node?.path}</p>
       </div>
       <div className={style.main}>
         {node?.children?.map((child) => (
