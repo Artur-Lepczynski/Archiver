@@ -1,4 +1,5 @@
 .infobar {
+  min-height: 30px;
   height: 30px;
   padding: 0 5px;
   border-top: 2px solid var(--bg-color-3);

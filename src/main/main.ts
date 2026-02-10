@@ -14,11 +14,8 @@ import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import MenuBuilder from "./menu";
 import { resolveHtmlPath } from "./util";
-import { diffFolders } from "./services/folderDiff.service";
-import { buildRawTree } from "./fs/treeBuilder";
 import { DiffNode } from "./types/diff.types";
 import { Worker } from "worker_threads";
-import { fileURLToPath } from "url";
 import { WorkerMessage } from "./types/workerMessage.types";
 
 class AppUpdater {

@@ -1,5 +1,6 @@
 .toolbar {
   /* background-color: red; */
+  min-height: 30px;
   height: 30px;
   padding: 0 2px;
   border-bottom: 2px solid var(--bg-color-3);

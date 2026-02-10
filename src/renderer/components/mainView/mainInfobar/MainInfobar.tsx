@@ -11,8 +11,8 @@ interface MainInfobarProps {
 
 export default function MainInfobar({ status, stats }: MainInfobarProps) {
   return (
-  <Infobar>
-    {status === DataStatus.FOLDER_CLOSED && <p className={style.text}>No folder selected</p>}
+    <Infobar>
+      {status === DataStatus.FOLDER_CLOSED && <p className={style.text}>No folder selected</p>}
       {status === DataStatus.DIFFING && <p className={style.text}>Working...</p>}
       {status === DataStatus.FOLDER_OPENED && stats && (
         <>
@@ -51,6 +51,6 @@ export default function MainInfobar({ status, stats }: MainInfobarProps) {
           <Separator className={style.separator} orientation="vertical" />
         </>
       )}
-  </Infobar>
-  )
+    </Infobar>
+  );
 }

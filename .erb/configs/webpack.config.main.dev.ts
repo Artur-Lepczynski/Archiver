@@ -26,7 +26,7 @@ const configuration: webpack.Configuration = {
   entry: {
     main: path.join(webpackPaths.srcMainPath, "main.ts"),
     preload: path.join(webpackPaths.srcMainPath, "preload.ts"),
-    folderDiffWorker: path.join(webpackPaths.srcMainPath, "workers/folderDiff.worker.ts")
+    folderDiffWorker: path.join(webpackPaths.srcMainPath, "workers/folderDiff.worker.ts"),
   },
 
   output: {

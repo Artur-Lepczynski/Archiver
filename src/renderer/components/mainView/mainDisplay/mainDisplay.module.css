@@ -24,3 +24,21 @@
 .cancel-button {
   margin-top: 15px;
 }
+
+.separator {
+  width: 2px;
+  background-color: var(--bg-color-3);
+}
+
+.separator[data-separator="hover"] {
+  background-color: var(--bg-color-4);
+}
+
+.separator:focus {
+  outline: none;
+}
+
+.separator[data-separator="active"] {
+  background-color: var(--bg-color-5);
+  outline: none;
+}

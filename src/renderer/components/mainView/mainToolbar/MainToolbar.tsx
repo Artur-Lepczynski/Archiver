@@ -1,16 +1,15 @@
 import openIcon from "../../../assets/icons/open-folder.svg";
 import closeIcon from "../../../assets/icons/close-folder.svg";
-import undoIcon from "../../../assets/icons/arrow-left.svg";
-import redoIcon from "../../../assets/icons/arrow-right.svg";
-import upIcon from "../../../assets/icons/arrow-up.svg";
 import infoIcon from "../../../assets/icons/info.svg";
 import settingsIcon from "../../../assets/icons/gear.svg";
+import planeSolidIcon from "../../../assets/icons/paper-plane-solid.svg";
+import planeOutlineIcon from "../../../assets/icons/paper-plane-outline.svg";
+import linkIcon from "../../../assets/icons/link.svg";
 import Toolbar from "../../UI/toolbar/Toolbar";
 import ToolbarGroup from "../../UI/toolbar/ToolbarGroup";
 import ToolBarButton from "../../UI/toolbar/ToolbarButton";
 import ToolbarSeparator from "../../UI/toolbar/ToolbarSeparator";
 import ToolbarSpacer from "../../UI/toolbar/ToolbarSpacer";
-
 
 interface MainToolbarProps {
   onReset: () => void;
@@ -49,9 +48,22 @@ export default function MainToolbar({ onReset: handleReset }: MainToolbarProps) 
       </ToolbarGroup>
       <ToolbarSeparator />
       <ToolbarGroup>
-        <ToolBarButton type="button" icon={undoIcon} aria-label="Undo" title="Undo" />
-        <ToolBarButton type="button" icon={redoIcon} aria-label="Redo" title="Redo" disabled />
-        <ToolBarButton type="button" icon={upIcon} aria-label="Go up" title="Go up" />
+        <ToolBarButton type="button" icon={linkIcon} aria-label="Link" title="Link" />
+      </ToolbarGroup>
+      <ToolbarSeparator />
+      <ToolbarGroup>
+        <ToolBarButton
+          type="button"
+          icon={planeSolidIcon}
+          aria-label="Archive all"
+          title="Archive all"
+        />
+        <ToolBarButton
+          type="button"
+          icon={planeOutlineIcon}
+          aria-label="Transfer all to archive"
+          title="Transfer all to archive"
+        />
       </ToolbarGroup>
       <ToolbarSpacer />
       <ToolbarGroup>
