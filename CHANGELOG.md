@@ -1,3 +1,12 @@
+# 0.4.0 
+
+- Added a progress bar when building folder trees and diffing 
+- The bottom infobar displays global folder information 
+- Added a folder display with its own toolbar and infobar. Stats, files and path are displayed in a rudimentary way 
+
+<br>
+<br>
+
 # 0.3.0 
 
 - Added a modal window used to open new folders 
