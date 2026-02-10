@@ -1,10 +1,10 @@
 import { useEffect, useReducer, useRef } from "react";
-import Infobar from "./infobar/Infobar";
 import style from "./Main.module.css";
-import MainDisplay from "./mainDisplay/mainDisplay";
-import Toolbar from "./toolbar/Toolbar";
 import { WorkerMessage } from "../../main/types/workerMessage.types";
 import { DiffResult } from "../../main/types/diff.types";
+import MainInfobar from "./mainView/mainInfobar/MainInfobar";
+import MainToolbar from "./mainView/mainToolbar/MainToolbar";
+import MainDisplay from "./mainView/mainDisplay/mainDisplay";
 
 export enum DataStatus {
   FOLDER_CLOSED = "FOLDER_CLOSED",
@@ -64,9 +64,9 @@ export default function Main() {
 
   return (
     <div className={style.main}>
-      <Toolbar onReset={handleReset} />
+      <MainToolbar onReset={handleReset} />
       <MainDisplay data={diffData} />
-      <Infobar status={diffData.status} stats={diffData.result?.stats} />
+      <MainInfobar status={diffData.status} stats={diffData.result?.stats} />
     </div>
   );
 }

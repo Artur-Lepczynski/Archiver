@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import Separator from "../UI/Separator";
+import Separator from "../../UI/Separator";
 import style from "./OpenNewFolderModal.module.css";
-import GenericButton from "../UI/GenericButton";
+import GenericButton from "../../UI/GenericButton";
 
 type FolderValidationError = "MISSING_PATH" | "SAME_PATH" | "NESTED_PATH" | "DIFFERENT_FOLDER_NAME";
 

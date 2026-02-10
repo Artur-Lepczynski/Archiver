@@ -1,8 +1,8 @@
 import { useLayoutEffect, useState } from "react";
 import style from "./AboutModal.module.css";
-import appIcon from "../../assets/icons/256x256.png";
-import Separator from "../UI/Separator";
-import GenericButton from "../UI/GenericButton";
+import appIcon from "../../../assets/icons/256x256.png";
+import Separator from "../../UI/Separator";
+import GenericButton from "../../UI/GenericButton";
 
 export default function AboutModal() {
   const [version, setVersion] = useState("");

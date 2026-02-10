@@ -1,8 +1,8 @@
 import style from "./mainDisplay.module.css";
-import { DataStatus, DiffDataType } from "../Main";
+import { DataStatus, DiffDataType } from "../../Main";
 import { PacmanLoader } from "react-spinners";
-import ProgressBar from "../UI/ProgressBar";
-import GenericButton from "../UI/GenericButton";
+import ProgressBar from "../../UI/ProgressBar";
+import GenericButton from "../../UI/GenericButton";
 
 interface MainDisplayProps {
   data: DiffDataType;

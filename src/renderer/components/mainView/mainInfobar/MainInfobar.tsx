@@ -1,17 +1,18 @@
-import { DiffTag } from "../../../main/types/diff.types";
-import { DataStatus } from "../Main";
-import Separator from "../UI/Separator";
-import style from "./Infobar.module.css";
+import { DiffTag } from "../../../../main/types/diff.types";
+import { DataStatus } from "../../Main";
+import Infobar from "../../UI/infobar/Infobar";
+import Separator from "../../UI/Separator";
+import style from "./MainInfobar.module.css";
 
-interface InfobarProps {
+interface MainInfobarProps {
   status: DataStatus;
   stats: Record<DiffTag | string, number> | undefined;
 }
 
-export default function Infobar({ status, stats }: InfobarProps) {
+export default function MainInfobar({ status, stats }: MainInfobarProps) {
   return (
-    <footer className={style.infobar}>
-      {status === DataStatus.FOLDER_CLOSED && <p className={style.text}>No folder selected</p>}
+  <Infobar>
+    {status === DataStatus.FOLDER_CLOSED && <p className={style.text}>No folder selected</p>}
       {status === DataStatus.DIFFING && <p className={style.text}>Working...</p>}
       {status === DataStatus.FOLDER_OPENED && stats && (
         <>
@@ -50,6 +51,6 @@ export default function Infobar({ status, stats }: InfobarProps) {
           <Separator className={style.separator} orientation="vertical" />
         </>
       )}
-    </footer>
-  );
+  </Infobar>
+  )
 }

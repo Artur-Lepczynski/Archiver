@@ -1,19 +1,22 @@
-import style from "./Toolbar.module.css";
-import openIcon from "../../assets/icons/open-folder.svg";
-import closeIcon from "../../assets/icons/close-folder.svg";
-import undoIcon from "../../assets/icons/arrow-left.svg";
-import redoIcon from "../../assets/icons/arrow-right.svg";
-import upIcon from "../../assets/icons/arrow-up.svg";
-import infoIcon from "../../assets/icons/info.svg";
-import settingsIcon from "../../assets/icons/gear.svg";
-import ToolBarButton from "./ToolbarButton";
-import ToolbarSeparator from "./ToolbarSeparator";
+import openIcon from "../../../assets/icons/open-folder.svg";
+import closeIcon from "../../../assets/icons/close-folder.svg";
+import undoIcon from "../../../assets/icons/arrow-left.svg";
+import redoIcon from "../../../assets/icons/arrow-right.svg";
+import upIcon from "../../../assets/icons/arrow-up.svg";
+import infoIcon from "../../../assets/icons/info.svg";
+import settingsIcon from "../../../assets/icons/gear.svg";
+import Toolbar from "../../UI/toolbar/Toolbar";
+import ToolbarGroup from "../../UI/toolbar/ToolbarGroup";
+import ToolBarButton from "../../UI/toolbar/ToolbarButton";
+import ToolbarSeparator from "../../UI/toolbar/ToolbarSeparator";
+import ToolbarSpacer from "../../UI/toolbar/ToolbarSpacer";
 
-interface ToolbarProps {
+
+interface MainToolbarProps {
   onReset: () => void;
 }
 
-export default function Toolbar({ onReset: handleReset }: ToolbarProps) {
+export default function MainToolbar({ onReset: handleReset }: MainToolbarProps) {
   async function openNewFolderModal() {
     await window.electron.openNewFolderModal();
   }
@@ -27,8 +30,8 @@ export default function Toolbar({ onReset: handleReset }: ToolbarProps) {
   }
 
   return (
-    <header className={style.toolbar}>
-      <div className={style.toolbarGroup}>
+    <Toolbar>
+      <ToolbarGroup>
         <ToolBarButton
           type="button"
           icon={openIcon}
@@ -43,15 +46,15 @@ export default function Toolbar({ onReset: handleReset }: ToolbarProps) {
           title="Close folder"
           onClick={handleCloseFolder}
         />
-      </div>
+      </ToolbarGroup>
       <ToolbarSeparator />
-      <div className={style.toolbarGroup}>
+      <ToolbarGroup>
         <ToolBarButton type="button" icon={undoIcon} aria-label="Undo" title="Undo" />
         <ToolBarButton type="button" icon={redoIcon} aria-label="Redo" title="Redo" disabled />
         <ToolBarButton type="button" icon={upIcon} aria-label="Go up" title="Go up" />
-      </div>
-      <div className={style.spacer} />
-      <div className={style.toolbarGroup}>
+      </ToolbarGroup>
+      <ToolbarSpacer />
+      <ToolbarGroup>
         <ToolBarButton
           type="button"
           icon={infoIcon}
@@ -60,7 +63,7 @@ export default function Toolbar({ onReset: handleReset }: ToolbarProps) {
           onClick={openAboutModal}
         />
         <ToolBarButton type="button" icon={settingsIcon} aria-label="Settings" title="Settings" />
-      </div>
-    </header>
+      </ToolbarGroup>
+    </Toolbar>
   );
 }

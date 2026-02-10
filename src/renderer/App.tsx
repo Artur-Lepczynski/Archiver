@@ -1,7 +1,7 @@
 import "./App.css";
-import AboutModal from "./components/about/AboutModal";
 import Main from "./components/Main";
-import OpenNewFolderModal from "./components/openNewFolder/OpenNewFolderModal";
+import AboutModal from "./components/windows/about/AboutModal";
+import OpenNewFolderModal from "./components/windows/openNewFolder/OpenNewFolderModal";
 
 export default function App() {
   const isNewFolderModal = window.electron?.isNewFolderModal;
