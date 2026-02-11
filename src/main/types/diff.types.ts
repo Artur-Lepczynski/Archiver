@@ -11,6 +11,10 @@ export interface RawNode {
   name: string;
   type: "file" | "dir";
   path: string;
+  friendlyName: string;
+  createdDate: Date;
+  modifiedDate: Date;
+  sizeString?: string;
   extension?: string;
   children?: RawNode[];
 }

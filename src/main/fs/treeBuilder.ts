@@ -2,6 +2,8 @@ import fs from "fs";
 import { RawNode } from "../types/diff.types";
 import path from "path";
 import { countNodesFromPath } from "../utils/tree.utils";
+import { resolveFileType } from "friendly-mimes";
+import { getSize } from "../utils/file.utils";
 
 export function buildRawTree(
   rootPath: string,
@@ -10,10 +12,21 @@ export function buildRawTree(
   const totalNodeCount = countNodesFromPath(rootPath);
   let currentProcessed = 0;
   let lastReportedPercent = 0;
+  const friendlyNameCache = new Map<string, string>();
 
   const result = buildRawTreeInternal(rootPath);
 
   return { result, totalNodeCount };
+
+  function getFriendlyName(extension: string) {
+    if (friendlyNameCache.has(extension)) {
+      return friendlyNameCache.get(extension);
+    } else {
+      const friendlyName = resolveFileType(extension).name;
+      friendlyNameCache.set(extension, friendlyName);
+      return friendlyName;
+    }
+  }
 
   function progressStep() {
     currentProcessed++;
@@ -31,19 +44,26 @@ export function buildRawTree(
     const extension = path.extname(rootPath);
     const name = path.basename(rootPath);
 
-    const node: RawNode = {
+    const node: Partial<RawNode> = {
       name,
       path: rootPath,
-      type: stats.isDirectory() ? "dir" : "file",
-      extension: stats.isDirectory() ? "" : extension,
+      createdDate: stats.birthtime,
+      modifiedDate: stats.mtime,
     };
 
     if (stats.isDirectory()) {
+      node.type = "dir";
+      node.friendlyName = "File folder";
       node.children = fs.readdirSync(rootPath).map((child) => {
         return buildRawTreeInternal(path.join(rootPath, child));
       });
+    } else if (stats.isFile()) {
+      node.type = "file";
+      node.extension = extension;
+      node.sizeString = getSize(stats.size);
+      node.friendlyName = getFriendlyName(extension);
     }
 
-    return node;
+    return node as RawNode;
   }
 }
