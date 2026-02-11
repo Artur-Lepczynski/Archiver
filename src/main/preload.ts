@@ -51,7 +51,17 @@ const diffAPIHandler = {
   },
 };
 
+const settingsHandler = {
+  getLastPaths(): Promise<{ lastSourcePath: string; lastArchivePath: string }> {
+    return ipcRenderer.invoke("settings:get-last-folder-paths");
+  },
+  setLastPaths(sourcePath: string, archivePath: string) {
+    ipcRenderer.invoke("settings:set-last-folder-paths", sourcePath, archivePath);
+  },
+};
+
 contextBridge.exposeInMainWorld("electron", electronHandler);
 contextBridge.exposeInMainWorld("diffAPI", diffAPIHandler);
+contextBridge.exposeInMainWorld("settingsAPI", settingsHandler);
 
 export type ElectronHandler = typeof electronHandler;

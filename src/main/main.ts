@@ -17,6 +17,7 @@ import { resolveHtmlPath } from "./util";
 import { DiffNode } from "./types/diff.types";
 import { Worker } from "worker_threads";
 import { WorkerMessage } from "./types/workerMessage.types";
+import { registerSettingsIpc } from "./settings/settingsIpc";
 
 class AppUpdater {
   constructor() {
@@ -279,6 +280,8 @@ ipcMain.handle("diff-folders", async (_, sourcePath: string, archivePath: string
     }
   });
 });
+
+registerSettingsIpc();
 
 function readFiles(node: DiffNode) {
   console.log(node.extension, node.name, node.type, node.tag);

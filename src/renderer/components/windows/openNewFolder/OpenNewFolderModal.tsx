@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 import Separator from "../../UI/Separator";
 import style from "./OpenNewFolderModal.module.css";
 import GenericButton from "../../UI/GenericButton";
@@ -10,6 +10,15 @@ type folderValidationResult = { valid: true } | { valid: false; reason: FolderVa
 export default function OpenNewFolderModal() {
   const [archivePath, setArchivePath] = useState("");
   const [sourcePath, setSourcePath] = useState("");
+
+  useLayoutEffect(() => {
+    async function setPaths() {
+      const { lastSourcePath, lastArchivePath } = await window.settingsAPI.getLastPaths();
+      setSourcePath(lastSourcePath);
+      setArchivePath(lastArchivePath);
+    }
+    setPaths();
+  }, []);
 
   function validateFolders(archiveURL: string, copyURL: string): folderValidationResult {
     const normalizedArchiveURL = archiveURL.replace(/\\/g, "/");
@@ -71,6 +80,7 @@ export default function OpenNewFolderModal() {
     if (foldersValid) {
       window.electron.closeNewFolderModal();
       window.electron.diffFolders(sourcePath, archivePath);
+      window.settingsAPI.setLastPaths(sourcePath, archivePath);
     }
   }
 
