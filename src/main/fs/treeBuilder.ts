@@ -22,7 +22,13 @@ export function buildRawTree(
     if (friendlyNameCache.has(extension)) {
       return friendlyNameCache.get(extension);
     } else {
-      const friendlyName = resolveFileType(extension).name;
+      let friendlyName;
+      try {
+        friendlyName = resolveFileType(extension).name;
+      } catch (error) {
+        friendlyName = extension.toUpperCase().slice(1) + " file";
+        console.log("--------friendly fail, new name", friendlyName);
+      }
       friendlyNameCache.set(extension, friendlyName);
       return friendlyName;
     }
