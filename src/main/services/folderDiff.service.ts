@@ -1,14 +1,13 @@
 import { DiffNode, DiffResult, DiffTag, RawNode } from "../types/diff.types";
-import { countNodes } from "../utils/tree.utils";
 
 export function diffFolders(
   source: RawNode,
   archive: RawNode,
+  totalNodeCount: number,
   reportProgress: (processed: number, total: number) => void,
 ): DiffResult {
   let lastReportedPercent = -1;
   let currentProcessed = 0;
-  const totalNodeCount = countNodes(source) + countNodes(archive);
   const tagStats = {
     TOTAL: totalNodeCount,
     [DiffTag.NONE]: 0,
@@ -20,6 +19,10 @@ export function diffFolders(
   };
 
   const { sourceNode, archiveNode } = diffPair(source, archive);
+
+  //remove root nodes from tag stats
+  tagStats[sourceNode?.tag!] -= 1;
+  tagStats[archiveNode?.tag!] -= 1;
 
   const res: DiffResult = {
     source: sourceNode!,
@@ -44,18 +47,16 @@ export function diffFolders(
       tagStats[sourceTag]++;
       tagStats[archiveTag]++;
 
+      const { children: _s, ...sourceRest } = sourceNode;
+      const { children: _a, ...archiveRest } = archiveNode;
+
       const newSourceNode: DiffNode = {
-        name: sourceNode.name,
-        type: sourceNode.type,
-        path: sourceNode.path,
-        extension: sourceNode.extension,
+        ...sourceRest,
         tag: sourceTag,
       };
+
       const newArchiveNode: DiffNode = {
-        name: archiveNode.name,
-        type: archiveNode.type,
-        path: archiveNode.path,
-        extension: archiveNode.extension,
+        ...archiveRest,
         tag: archiveTag,
       };
 
@@ -106,7 +107,6 @@ export function diffFolders(
 
   function progressStep(double: boolean) {
     double ? (currentProcessed += 2) : currentProcessed++;
-
     const percent = Math.floor((currentProcessed / totalNodeCount) * 100);
 
     if (percent > lastReportedPercent) {

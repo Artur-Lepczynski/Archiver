@@ -18,9 +18,17 @@ parentPort?.on("message", ({ sourcePath, archivePath }) => {
     reportProgress("Creating archive tree"),
   );
 
-  const result = diffFolders(sourceTree, archiveTree, reportProgress("Diffing trees like a baws"));
-  result.stats.SOURCE_NODES = sourceNodeCount;
-  result.stats.ARCHIVE_NODES = archiveNodeCount;
+  const result = diffFolders(
+    sourceTree,
+    archiveTree,
+    sourceNodeCount + archiveNodeCount,
+    reportProgress("Finding the difference between source and archive"),
+  );
+
+  //remove root nodes from stats
+  result.stats.SOURCE_NODES = sourceNodeCount - 1;
+  result.stats.ARCHIVE_NODES = archiveNodeCount - 1;
+  result.stats.TOTAL -= 2;
 
   const doneMessage: WorkerMessage = { type: "done", result };
   parentPort?.postMessage(doneMessage);

@@ -16,7 +16,7 @@ export function buildRawTree(
 
   const result = buildRawTreeInternal(rootPath);
 
-  return { result, totalNodeCount };
+  return { result, totalNodeCount: totalNodeCount };
 
   function getFriendlyName(extension: string) {
     if (friendlyNameCache.has(extension)) {
@@ -31,6 +31,7 @@ export function buildRawTree(
   function progressStep() {
     currentProcessed++;
     const percent = Math.floor((currentProcessed / totalNodeCount) * 100);
+
     if (percent > lastReportedPercent) {
       lastReportedPercent = percent;
       reportProgress(currentProcessed, totalNodeCount);
